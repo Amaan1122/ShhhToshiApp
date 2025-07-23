@@ -1,0 +1,97 @@
+<div class="container">
+  <div class="stake-coins-section">
+    <mat-card class="staking-card">
+      <h2>Stake Tokens</h2>
+
+      <p>
+        Available Balance: <strong>{{ balance() }} TON</strong>
+      </p>
+
+      <form [formGroup]="stakeForm" (ngSubmit)="stake()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Amount to Stake</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="stakeAmount"
+            placeholder="Enter amount"
+          />
+          <mat-error *ngIf="stakeForm.get('stakeAmount')?.hasError('required')"
+            >Amount is required</mat-error
+          >
+          <mat-error *ngIf="stakeForm.get('stakeAmount')?.hasError('min')"
+            >Minimum stake is 1 TON</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Days To Stake</mat-label>
+          <mat-select formControlName="period">
+            @for (day of days; track day) {
+            <mat-option [value]="day.value">{{ day.value }}</mat-option>
+            }
+          </mat-select>
+          <mat-error *ngIf="stakeForm.get('period')?.hasError('required')"
+            >Amount is required</mat-error
+          >
+        </mat-form-field>
+
+        <p *ngIf="reward() > 0">
+          Estimated Rewards:
+          <strong>{{ reward() | number : "1.2-2" }} TON</strong>
+        </p>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="stakeForm.invalid"
+        >
+          Stake
+        </button>
+      </form>
+    </mat-card>
+  </div>
+
+  <div class="unstake-coins-section">
+    <mat-card class="unstaking-card">
+      <h2>Un Stake Tokens</h2>
+
+      <p>
+        Available Balance: <strong>{{ stakedAmount }} TON</strong>
+      </p>
+
+      <form [formGroup]="unStakeForm" (ngSubmit)="unStake()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Amount to Un Stake</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="unStakeAmount"
+            placeholder="Enter Un Stake Amount"
+          />
+          <mat-error *ngIf="unStakeForm.get('unStakeAmount')?.hasError('required')"
+            >Amount is required</mat-error
+          >
+          <mat-error *ngIf="unStakeForm.get('unStakeAmount')?.hasError('min')"
+            >Minimum stake is 1 TON</mat-error
+          >
+        </mat-form-field>
+
+        <p *ngIf="penalty() > 0">
+          Estimated Loss:
+          <strong>{{ reward() | number : "1.2-2" }} TON</strong>
+        </p>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="unStakeForm.invalid"
+        >
+          UnStake
+        </button>
+      </form>
+    </mat-card>
+  </div>
+</div>
