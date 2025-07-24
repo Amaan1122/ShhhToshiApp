@@ -22,6 +22,8 @@
     "@angular/platform-server": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.9",
+    "@tonconnect/sdk": "^3.2.0",
+    "@tonconnect/ui": "^2.2.0",
     "express": "^4.18.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

@@ -5,7 +5,7 @@ import { StakingComponent } from './components/staking/staking.component';
 import { TasksComponent } from './components/tasks/tasks.component';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', component: DashboardComponent },
+  { path: '**', component: DashboardComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'wallet', component: WalletComponent },
   { path: 'staking', component: StakingComponent },

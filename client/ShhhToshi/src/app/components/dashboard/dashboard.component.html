@@ -1,1 +1,26 @@
-<p>dashboard works!</p>
+<div
+  style="
+    padding: 25px;
+    font-family: sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+  "
+>
+  <h2>ShhhToshi Wallet Connect</h2>
+
+  <!-- TON Connect Button will be injected here -->
+  <div id="ton-connect-button"></div>
+
+  <div
+    *ngIf="walletSaved"
+    style="
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #d1ffd1;
+      border-radius: 8px;
+      color: #064e00;
+    "
+  >
+    ✅ Wallet connected and saved!
+  </div>
+</div>
