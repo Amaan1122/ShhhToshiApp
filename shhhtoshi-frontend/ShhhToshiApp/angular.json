@@ -3,32 +3,29 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "user-dapp": {
+    "ShhhToshiApp": {
       "projectType": "application",
       "schematics": {},
-      "root": "projects/user-dapp",
-      "sourceRoot": "projects/user-dapp/src",
+      "root": "",
+      "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/user-dapp",
-            "index": "projects/user-dapp/src/index.html",
-            "browser": "projects/user-dapp/src/main.ts",
+            "outputPath": "dist/shhh-toshi-app",
+            "index": "src/index.html",
+            "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
-            "tsConfig": "projects/user-dapp/tsconfig.app.json",
+            "tsConfig": "tsconfig.app.json",
             "assets": [
-              "projects/user-dapp/src/assets",
-              {
-                "glob": "**/*",
-                "input": "projects/user-dapp/public"
-              }
+              "src/assets",
+              "src/favicon.ico"
             ],
             "styles": [
-              "projects/user-dapp/src/styles.css"
+              "src/styles.css"
             ],
             "scripts": []
           },
@@ -60,10 +57,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "user-dapp:build:production"
+              "buildTarget": "ShhhToshiApp:build:production"
             },
             "development": {
-              "buildTarget": "user-dapp:build:development"
+              "buildTarget": "ShhhToshiApp:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -78,109 +75,13 @@
               "zone.js",
               "zone.js/testing"
             ],
-            "tsConfig": "projects/user-dapp/tsconfig.spec.json",
+            "tsConfig": "tsconfig.spec.json",
             "assets": [
-              "projects/user-dapp/src/assets",
-              {
-                "glob": "**/*",
-                "input": "projects/user-dapp/public"
-              }
+              "src/assets",
+              "src/favicon.ico"
             ],
             "styles": [
-              "projects/user-dapp/src/styles.css"
-            ],
-            "scripts": []
-          }
-        }
-      }
-    },
-    
-    
-    "admin-panel": {
-      "projectType": "application",
-      "schematics": {},
-      "root": "projects/admin-panel",
-      "sourceRoot": "projects/admin-panel/src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:application",
-          "options": {
-            "outputPath": "dist/admin-panel",
-            "index": "projects/admin-panel/src/index.html",
-            "browser": "projects/admin-panel/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
-            "tsConfig": "projects/admin-panel/tsconfig.app.json",
-            "assets": [
-              "projects/admin-panel/src/assets",
-              {
-                "glob": "**/*",
-                "input": "projects/admin-panel/public"
-              }
-            ],
-            "styles": [
-              "projects/admin-panel/src/styles.css"
-            ],
-            "scripts": []
-          },
-          "configurations": {
-            "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "4mb",
-                  "maximumError": "4MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "4mb",
-                  "maximumError": "4mb"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "configurations": {
-            "production": {
-              "buildTarget": "admin-panel:build:production"
-            },
-            "development": {
-              "buildTarget": "admin-panel:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n"
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
-            "tsConfig": "projects/admin-panel/tsconfig.spec.json",
-            "assets": [
-              "projects/admin-panel/src/assets",
-              {
-                "glob": "**/*",
-                "input": "projects/admin-panel/public"
-              }
-            ],
-            "styles": [
-              "projects/admin-panel/src/styles.css"
+              "src/styles.css"
             ],
             "scripts": []
           }

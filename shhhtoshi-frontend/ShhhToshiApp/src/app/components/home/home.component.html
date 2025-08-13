@@ -1,0 +1,13 @@
+<div class="mx-7 my-5">
+  <h2 class="text-red-400 py-4">ShhhToshi Wallet Connect</h2>
+  <div class="flex text-center justify-between">
+    <!-- TON Connect Button will be injected here -->
+    <div id="ton-connect-button"></div>
+
+    <button class="p-2 bg-slate-600 text-white" (click)="getWalletInfo()">
+      Fetch Wallet Info
+    </button>
+
+    <p>Wallet Info: {{ wallet?.aboutUrl }}</p>
+  </div>
+</div>
