@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit, AfterViewInit {
   wallet: any;
+  walletAddress: string | undefined;
 
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: Object,
@@ -28,8 +29,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.tonConnectService.walletData$.subscribe((wallet) => {
       if (wallet?.account?.address) {
-        console.log('✅ Wallet connected:', wallet.account.address);
-        this.route.navigate(['stake']);
+        this.route.navigate(['']);
+        this.getWalletInfo();
       }
     });
   }
@@ -39,6 +40,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   getWalletInfo() {
-    console.log('Wallet info:', this.wallet);
+    this.wallet = this.tonConnectService.getWalletInfo();
+    this.walletAddress = this.tonConnectService.getCurrentWalletAddress();
   }
 }

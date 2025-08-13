@@ -11,9 +11,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class TonConnectService {
   private tonConnectUI: TonConnectUI | null = null;
 
-  private walletAddressSubject = new BehaviorSubject<string>('');
-  private walletConnectedSubject = new BehaviorSubject<boolean>(false);
-  private walletDataSubject = new BehaviorSubject<Wallet | null>(null);
+  private readonly walletAddressSubject = new BehaviorSubject<string>('');
+  private readonly walletConnectedSubject = new BehaviorSubject<boolean>(false);
+  private readonly walletDataSubject = new BehaviorSubject<Wallet | null>(null);
 
   walletAddress$: Observable<string> = this.walletAddressSubject.asObservable();
   walletConnected$: Observable<boolean> =
