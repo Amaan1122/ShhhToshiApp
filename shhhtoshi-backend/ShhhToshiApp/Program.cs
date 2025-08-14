@@ -1,6 +1,9 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Shhhtoshi.Api.DB;
+using System.Text;
 
 namespace ShhhToshiApp
 {
@@ -18,8 +21,35 @@ namespace ShhhToshiApp
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection"));
             });
 
+            // Configure JWT Authentication
+
+            //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //    .AddJwtBearer(options =>
+            //    {
+            //        options.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            ValidateIssuer = false,
+            //            ValidateAudience = false,
+            //            ValidateIssuerSigningKey = true,
+            //            IssuerSigningKey = new SymmetricSecurityKey(
+            //    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            //        };
+            //    });
+
+            // Adding CORS policy
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularApplication",
+                    policy =>
+                    {
+                        policy.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                    });
+            });
+
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -32,6 +62,7 @@ namespace ShhhToshiApp
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("AllowAngularApplication");
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();

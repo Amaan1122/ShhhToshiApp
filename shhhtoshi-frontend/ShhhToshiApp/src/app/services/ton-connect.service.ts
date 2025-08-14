@@ -97,9 +97,9 @@ export class TonConnectService {
     const address = localStorage.getItem('walletAddress');
     const connected = localStorage.getItem('walletConnected') === 'true';
 
-    if (address && connected) {
-      this.walletAddressSubject.next(address);
-      this.walletConnectedSubject.next(true);
+    if (address && connected && this.tonConnectUI?.wallet) {
+      const wallet = this.tonConnectUI.wallet;
+      this.setWallet(wallet);
     }
   }
 }

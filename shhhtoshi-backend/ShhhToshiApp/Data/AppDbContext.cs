@@ -8,7 +8,7 @@ namespace Shhhtoshi.Api.DB
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<WalletUser> WalletUsers { get; set; }
         public DbSet<TaskItem> Tasks { get; set; }
         public DbSet<Referral> Referrals { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
@@ -16,6 +16,10 @@ namespace Shhhtoshi.Api.DB
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<WalletUser>()
+            .HasIndex(u => u.WalletAddress)
+            .IsUnique();
+
             // Composite relationship for Referrals
             modelBuilder.Entity<Referral>()
                 .HasOne(r => r.Referrer)

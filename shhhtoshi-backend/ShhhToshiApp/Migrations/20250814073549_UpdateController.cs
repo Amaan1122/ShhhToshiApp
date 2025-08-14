@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShhhToshiApp.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class UpdateController : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -123,24 +123,24 @@ namespace ShhhToshiApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Wallets",
+                name: "WalletUsers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    LinkedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    WalletAddress = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StakedAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    LastStakedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    JoinedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Wallets", x => x.Id);
+                    table.PrimaryKey("PK_WalletUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Wallets_Users_UserId",
+                        name: "FK_WalletUsers_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -174,9 +174,15 @@ namespace ShhhToshiApp.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Wallets_UserId",
-                table: "Wallets",
+                name: "IX_WalletUsers_UserId",
+                table: "WalletUsers",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WalletUsers_WalletAddress",
+                table: "WalletUsers",
+                column: "WalletAddress",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -195,7 +201,7 @@ namespace ShhhToshiApp.Migrations
                 name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "Wallets");
+                name: "WalletUsers");
 
             migrationBuilder.DropTable(
                 name: "Users");

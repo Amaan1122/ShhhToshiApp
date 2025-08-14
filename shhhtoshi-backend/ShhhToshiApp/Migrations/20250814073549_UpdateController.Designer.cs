@@ -12,8 +12,8 @@ using Shhhtoshi.Api.DB;
 namespace ShhhToshiApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250812125519_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250814073549_UpdateController")]
+    partial class UpdateController
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -165,30 +165,36 @@ namespace ShhhToshiApp.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ShhhToshiApp.Models.Wallet", b =>
+            modelBuilder.Entity("ShhhToshiApp.Models.WalletUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("LinkedAt")
+                    b.Property<DateTime>("JoinedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<DateTime>("LastStakedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("StakedAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("WalletAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Wallets");
+                    b.HasIndex("WalletAddress")
+                        .IsUnique();
+
+                    b.ToTable("WalletUsers");
                 });
 
             modelBuilder.Entity("ShhhToshiApp.Models.Referral", b =>
@@ -245,15 +251,11 @@ namespace ShhhToshiApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ShhhToshiApp.Models.Wallet", b =>
+            modelBuilder.Entity("ShhhToshiApp.Models.WalletUser", b =>
                 {
-                    b.HasOne("ShhhToshiApp.Models.User", "User")
+                    b.HasOne("ShhhToshiApp.Models.User", null)
                         .WithMany("Wallets")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ShhhToshiApp.Models.User", b =>

@@ -9,7 +9,7 @@
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
-        public ICollection<Wallet> Wallets { get; set; } = new List<Wallet>();
+        public ICollection<WalletUser> Wallets { get; set; } = new List<WalletUser>();
         public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
         public ICollection<Referral> Referrals { get; set; } = new List<Referral>();
         public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
