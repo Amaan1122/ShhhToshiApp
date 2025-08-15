@@ -1,0 +1,59 @@
+<div class="fixed bottom-0 z-50 w-full h-14 bg-gray-700">
+  <div class="grid h-full grid-cols-5 mx-auto font-medium">
+    <button
+      type="button"
+      class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
+      [routerLink]="['/home']"
+    >
+      <lucide-icon [name]="Home" class="text-gray-400"></lucide-icon>
+      <span
+        class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
+        >Home</span
+      >
+    </button>
+    <button
+      type="button"
+      class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
+      [routerLink]="['/stake']"
+    >
+      <lucide-icon [name]="Home" class="text-gray-400"></lucide-icon>
+      <span
+        class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
+        >Stake</span
+      >
+    </button>
+    <a
+      type="button"
+      class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
+      [routerLink]="['/tasks']"
+    >
+      <lucide-icon [name]="Gift" class="text-gray-400"></lucide-icon>
+      <span
+        class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
+        >Tasks</span
+      >
+    </a>
+    <button
+      type="button"
+      class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
+      [routerLink]="['/referrals']"
+    >
+      <lucide-icon [name]="Users" class="text-gray-400"></lucide-icon>
+      <span
+        class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
+        >Referrals</span
+      >
+    </button>
+    <button
+      type="button"
+      class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
+      [routerLink]="['/wallet']"
+    >
+      <lucide-icon [name]="Wallet" class="text-gray-400"></lucide-icon>
+      <span
+        class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
+        >Wallet</span
+      >
+    </button>
+  </div>
+</div>
