@@ -36,5 +36,4 @@ export const routes: Routes = [
         (m) => m.WalletComponent
       ),
   },
-  { path: '**', redirectTo: '' },
 ];
