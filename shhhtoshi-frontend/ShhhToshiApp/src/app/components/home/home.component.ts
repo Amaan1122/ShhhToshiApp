@@ -9,11 +9,12 @@ import {
 import { TonConnectService } from '../../services/ton-connect.service';
 import { Router } from '@angular/router';
 import { WalletService } from '../../services/wallet.service';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FooterComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })

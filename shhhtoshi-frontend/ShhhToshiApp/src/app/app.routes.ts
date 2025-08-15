@@ -22,5 +22,19 @@ export const routes: Routes = [
         (m) => m.TasksComponent
       ),
   },
+  {
+    path: 'referrals',
+    loadComponent: () =>
+      import('../app/components/referrals/referrals.component').then(
+        (m) => m.ReferralsComponent
+      ),
+  },
+  {
+    path: 'wallet',
+    loadComponent: () =>
+      import('../app/components/wallet/wallet.component').then(
+        (m) => m.WalletComponent
+      ),
+  },
   { path: '**', redirectTo: '' },
 ];

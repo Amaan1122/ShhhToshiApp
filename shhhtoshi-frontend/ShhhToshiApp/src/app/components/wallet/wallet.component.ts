@@ -3,12 +3,12 @@ import { Component } from '@angular/core';
 import { FooterComponent } from '../footer/footer.component';
 
 @Component({
-  selector: 'app-tasks',
+  selector: 'app-wallet',
   standalone: true,
   imports: [CommonModule, FooterComponent],
-  templateUrl: './tasks.component.html',
-  styleUrl: './tasks.component.css'
+  templateUrl: './wallet.component.html',
+  styleUrl: './wallet.component.css'
 })
-export class TasksComponent {
+export class WalletComponent {
 
 }
