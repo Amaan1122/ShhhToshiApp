@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RewardsComponent } from './rewards.component';
+import { StakeComponent } from './stake-unstake.component';
 
-describe('RewardsComponent', () => {
-  let component: RewardsComponent;
-  let fixture: ComponentFixture<RewardsComponent>;
+describe('StakeComponent', () => {
+  let component: StakeComponent;
+  let fixture: ComponentFixture<StakeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RewardsComponent]
+      imports: [StakeComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(RewardsComponent);
+    fixture = TestBed.createComponent(StakeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

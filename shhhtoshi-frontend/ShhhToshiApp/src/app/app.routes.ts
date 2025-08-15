@@ -11,8 +11,8 @@ export const routes: Routes = [
   {
     path: 'stake',
     loadComponent: () =>
-      import('../app/components/stake/stake.component').then(
-        (m) => m.StakeComponent
+      import('./components/stake-unstake/stake-unstake.component').then(
+        (m) => m.StakeUnstakeComponent
       ),
   },
   {
@@ -20,13 +20,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('../app/components/tasks/tasks.component').then(
         (m) => m.TasksComponent
-      ),
-  },
-  {
-    path: 'rewards',
-    loadComponent: () =>
-      import('../app/components/rewards/rewards.component').then(
-        (m) => m.RewardsComponent
       ),
   },
   { path: '**', redirectTo: '' },

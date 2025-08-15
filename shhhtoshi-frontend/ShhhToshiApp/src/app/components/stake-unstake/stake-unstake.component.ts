@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { WalletService } from '../../services/wallet.service';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { StakeUnstakeModel } from '../../models/stakeUnstakeModel';
+import { FooterComponent } from '../footer/footer.component';
+import { StakeUnstakeService } from '../../services/stake-unstake.service';
 import { TonConnectService } from '../../services/ton-connect.service';
 import { Router } from '@angular/router';
+import { WalletService } from '../../services/wallet.service';
 
 @Component({
-  selector: 'app-stake',
+  selector: 'app-stake-unstake',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './stake.component.html',
-  styleUrl: './stake.component.css',
+  imports: [CommonModule, FooterComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './stake-unstake.component.html',
 })
-export class StakeComponent implements OnInit {
+export class StakeUnstakeComponent {
   walletAddress = '';
   walletBalance = 0;
   stakedAmount = 0;
@@ -20,14 +22,47 @@ export class StakeComponent implements OnInit {
   unstakeAmount = 0;
   estimatedReward = 0;
 
+  @Input({ required: true }) model!: StakeUnstakeModel;
+
   constructor(
     private readonly walletService: WalletService,
+    private readonly stakeUnstakeService: StakeUnstakeService,
     private readonly tonConnectService: TonConnectService,
     private readonly route: Router
-  ) {}
+  ) {
+    this.model = new StakeUnstakeModel();
+  }
 
   ngOnInit() {
     this.initialize();
+  }
+
+  onAmountInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.model.setAmount(target.value.replace(/,/g, '.'));
+  }
+
+  onInputKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && this.model.isButtonEnabled()) {
+      const btn = document.querySelector<HTMLButtonElement>('#submit');
+      btn?.click();
+      (event.target as HTMLInputElement).blur();
+    }
+  }
+
+  submit(): void {
+    if (this.model.isWalletConnected()) {
+      if (
+        this.model.isStakeTabActive() ||
+        this.model.unstakeOption() === 'unstake'
+      ) {
+        this.model.send();
+      } else {
+        window.open(this.model.swapUrl(), 'hipo_swap');
+      }
+    } else {
+      this.model.connect();
+    }
   }
 
   initialize() {
@@ -50,19 +85,19 @@ export class StakeComponent implements OnInit {
   }
 
   stakeNow() {
-    this.walletService
+    this.stakeUnstakeService
       .stake(this.walletAddress, this.stakeAmount)
       .subscribe(() => this.ngOnInit());
   }
 
   unstakeNow() {
-    this.walletService
+    this.stakeUnstakeService
       .unstake(this.walletAddress, this.unstakeAmount)
       .subscribe(() => this.ngOnInit());
   }
 
   claimRewards() {
-    this.walletService
+    this.stakeUnstakeService
       .claimRewards(this.walletAddress)
       .subscribe(() => this.ngOnInit());
   }

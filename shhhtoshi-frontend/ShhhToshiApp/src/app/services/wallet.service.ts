@@ -17,21 +17,4 @@ export class WalletService {
       `${this.baseUrl}/walletInfo?walletAddress=${walletAddress}`
     );
   }
-
-  stake(walletAddress: string, stakeAmount: number): Observable<any> {
-    const headers = new HttpHeaders().set('X-Wallet-Address', walletAddress);
-    return this.http.post(`${this.baseUrl}/stake`, stakeAmount, { headers });
-  }
-
-  unstake(walletAddress: string, unStakeAmount: number): Observable<any> {
-    const headers = new HttpHeaders().set('X-Wallet-Address', walletAddress);
-    return this.http.post(`${this.baseUrl}/unstake`, unStakeAmount, {
-      headers,
-    });
-  }
-
-  claimRewards(walletAddress: string): Observable<any> {
-    const headers = new HttpHeaders().set('X-Wallet-Address', walletAddress);
-    return this.http.post(`${this.baseUrl}/claim`, {}, { headers });
-  }
 }
