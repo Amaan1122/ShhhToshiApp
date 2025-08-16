@@ -1,0 +1,15 @@
+{
+    "projects": {
+        "frontend": {
+            "rootDirectory": "ShhhToshiApp/shhhtoshi-frontend/ShhhToshiApp",
+            "buildCommand": "ng build --configuration production",
+            "outputDirectory": "dist/shhh-toshi-app/browser",
+            "rewrites": [
+                {
+                    "source": "/(.*)",
+                    "destination": "/index.html"
+                }
+            ]
+        }
+    }
+}
