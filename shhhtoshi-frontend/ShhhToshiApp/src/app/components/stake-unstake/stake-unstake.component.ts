@@ -6,11 +6,12 @@ import { StakeUnstakeService } from '../../services/stake-unstake.service';
 import { TonConnectService } from '../../services/ton-connect.service';
 import { Router } from '@angular/router';
 import { WalletService } from '../../services/wallet.service';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-stake-unstake',
   standalone: true,
-  imports: [CommonModule, FooterComponent],
+  imports: [CommonModule, HeaderComponent, FooterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './stake-unstake.component.html',
   styleUrl: './stake-unstake.component.css',

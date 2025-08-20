@@ -12,8 +12,6 @@ export class StakeUnstakeModel {
   readonly isWalletConnected = signal(false);
   readonly amount = signal(0);
   readonly unstakeOption = signal<'unstake' | 'swap'>('unstake');
-  readonly stakingInProgress = signal<StakingDetail[]>([]);
-  readonly unstakingInProgress = signal<StakingDetail | null>(null);
 
   // Internal balances
   private readonly _tonBalance = signal(0);
@@ -91,8 +89,6 @@ export class StakeUnstakeModel {
     // stub balances/details
     this._tonBalance.set(123.45);
     this._shTokenBalance.set(67.89);
-    this.stakingInProgress.set([{ amount: '10', estimated: '2025-08-20' }]);
-    this.unstakingInProgress.set({ amount: '5', estimated: '2025-08-22' });
   }
 
   async send(): Promise<void> {
