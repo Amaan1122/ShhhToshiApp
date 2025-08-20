@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShhhToshiApp.Models;
+using ShhhToshiApp.Models.StakingUnstaking;
+using ShhhToshiApp.Models.TaskSystem;
 
 namespace Shhhtoshi.Api.DB
 {
@@ -7,12 +9,10 @@ namespace Shhhtoshi.Api.DB
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
         public DbSet<WalletUser> WalletUsers { get; set; }
-        public DbSet<TaskItem> Tasks { get; set; }
-        public DbSet<Referral> Referrals { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<Reward> Rewards { get; set; }
+        public DbSet<TaskItem> TaskItems { get; set; }
+        public DbSet<TaskCompletion> TaskCompletions { get; set; }
+        public DbSet<PointClaim> PointClaims { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,18 +20,24 @@ namespace Shhhtoshi.Api.DB
             .HasIndex(u => u.WalletAddress)
             .IsUnique();
 
-            // Composite relationship for Referrals
-            modelBuilder.Entity<Referral>()
-                .HasOne(r => r.Referrer)
-                .WithMany()
-                .HasForeignKey(r => r.ReferrerId)
-                .OnDelete(DeleteBehavior.Restrict);
+            // Composite relationship for Tasks
 
-            modelBuilder.Entity<Referral>()
-                .HasOne(r => r.ReferredUser)
+            modelBuilder.Entity<TaskCompletion>()
+                .HasOne(tc => tc.WalletUser)
+                .WithMany(u => u.TaskCompletions)
+                .HasForeignKey(tc => tc.WalletAddress)
+                .HasPrincipalKey(u => u.WalletAddress);
+
+            modelBuilder.Entity<PointClaim>()
+                .HasOne(pc => pc.WalletUser)
+                .WithMany(u => u.PointClaims)
+                .HasForeignKey(pc => pc.WalletAddress)
+                .HasPrincipalKey(u => u.WalletAddress);
+
+            modelBuilder.Entity<TaskCompletion>()
+                .HasOne(tc => tc.TaskItem)
                 .WithMany()
-                .HasForeignKey(r => r.ReferredUserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(tc => tc.TaskId);
         }
     }
 }
