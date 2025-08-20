@@ -5,7 +5,7 @@ import {
   LucideAngularModule,
   House,
   Wallet,
-  Settings,
+  Coins,
   Gift,
   Users
 } from 'lucide-angular';
@@ -20,7 +20,7 @@ import {
 export class FooterComponent {
   Home = House;
   Wallet = Wallet;
-  Settings = Settings;
+  Coins = Coins;
   Users = Users;
   Gift = Gift;
 }

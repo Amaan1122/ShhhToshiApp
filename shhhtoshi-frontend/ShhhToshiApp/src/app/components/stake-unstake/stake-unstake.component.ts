@@ -6,13 +6,15 @@ import { StakeUnstakeService } from '../../services/stake-unstake.service';
 import { TonConnectService } from '../../services/ton-connect.service';
 import { Router } from '@angular/router';
 import { WalletService } from '../../services/wallet.service';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-stake-unstake',
   standalone: true,
-  imports: [CommonModule, FooterComponent],
+  imports: [CommonModule, HeaderComponent, FooterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './stake-unstake.component.html',
+  styleUrl: './stake-unstake.component.css',
 })
 export class StakeUnstakeComponent {
   walletAddress = '';
@@ -39,7 +41,7 @@ export class StakeUnstakeComponent {
 
   onAmountInput(event: Event): void {
     const target = event.target as HTMLInputElement;
-    this.model.setAmount(target.value.replace(/,/g, '.'));
+    this.model.setAmount(Number(target.value));
   }
 
   onInputKeyDown(event: KeyboardEvent): void {
@@ -52,13 +54,10 @@ export class StakeUnstakeComponent {
 
   submit(): void {
     if (this.model.isWalletConnected()) {
-      if (
-        this.model.isStakeTabActive() ||
-        this.model.unstakeOption() === 'unstake'
-      ) {
-        this.model.send();
-      } else {
-        window.open(this.model.swapUrl(), 'hipo_swap');
+      if (this.model.isStakeTabActive()) {
+        this.stakeNow();
+      } else if (!this.model.isStakeTabActive) {
+        this.unstakeNow();
       }
     } else {
       this.model.connect();
@@ -68,6 +67,9 @@ export class StakeUnstakeComponent {
   initialize() {
     const connectedWalletAddress =
       this.tonConnectService.getCurrentWalletAddress();
+    if (connectedWalletAddress) {
+      this.model.connect();
+    }
     this.walletService
       .getWalletInfo(connectedWalletAddress)
       .subscribe((info) => {
@@ -86,13 +88,13 @@ export class StakeUnstakeComponent {
 
   stakeNow() {
     this.stakeUnstakeService
-      .stake(this.walletAddress, this.stakeAmount)
+      .stake(this.walletAddress, this.model.amount())
       .subscribe(() => this.ngOnInit());
   }
 
   unstakeNow() {
     this.stakeUnstakeService
-      .unstake(this.walletAddress, this.unstakeAmount)
+      .unstake(this.walletAddress, this.model.amount())
       .subscribe(() => this.ngOnInit());
   }
 

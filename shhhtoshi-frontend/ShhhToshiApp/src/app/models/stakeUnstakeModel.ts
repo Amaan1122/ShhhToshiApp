@@ -10,26 +10,24 @@ export class StakeUnstakeModel {
   // Raw state signals
   readonly isStakeTabActive = signal(true);
   readonly isWalletConnected = signal(false);
-  readonly amount = signal('');
+  readonly amount = signal(0);
   readonly unstakeOption = signal<'unstake' | 'swap'>('unstake');
-  readonly stakingInProgress = signal<StakingDetail[]>([]);
-  readonly unstakingInProgress = signal<StakingDetail | null>(null);
 
   // Internal balances
   private readonly _tonBalance = signal(0);
-  private readonly _htonBalance = signal(0);
+  private readonly _shTokenBalance = signal(0);
 
   // Computed / derived
   readonly tonBalanceFormatted = computed(
     () => this._tonBalance().toFixed(2) + ' TON'
   );
 
-  readonly htonBalanceFormatted = computed(
-    () => this._htonBalance().toFixed(2) + ' hTON'
+  readonly shTokenBalanceFormatted = computed(
+    () => this._shTokenBalance().toFixed(2) + ' SHToken'
   );
 
   readonly isAmountValid = computed(() => {
-    const val = parseFloat(this.amount().replace(',', '.'));
+    const val = this.amount();
     return !isNaN(val) && val > 0 && val <= this._tonBalance();
   });
 
@@ -51,18 +49,15 @@ export class StakeUnstakeModel {
   });
 
   readonly youWillReceive = computed(() => {
-    const amt = parseFloat(this.amount().replace(',', '.')) || 0;
+    const amt = this.amount();
     const rate = this.exchangeRateRaw();
     return (amt * rate).toFixed(2);
   });
 
   readonly exchangeRateRaw = signal(0.95);
   readonly exchangeRateFormatted = computed(
-    () => this.exchangeRateRaw().toFixed(4) + ' TON/hTON'
+    () => this.exchangeRateRaw().toFixed(4) + ' TON/SHToken'
   );
-
-  readonly averageStakeFeeFormatted = computed(() => '0.01 TON');
-  readonly averageUnstakeFeeFormatted = computed(() => '0.015 TON');
 
   readonly swapUrl = computed(
     () => `https://swap.example.com?amount=${encodeURIComponent(this.amount())}`
@@ -71,16 +66,16 @@ export class StakeUnstakeModel {
   // Public API
   setActiveTab(tab: 'stake' | 'unstake'): void {
     this.isStakeTabActive.set(tab === 'stake');
-    this.amount.set('');
+    this.amount.set(0);
     this.unstakeOption.set('unstake');
   }
 
-  setAmount(value: string): void {
+  setAmount(value: number): void {
     this.amount.set(value);
   }
 
   setAmountToMax(): void {
-    this.amount.set(this._tonBalance().toString());
+    this.amount.set(this._tonBalance());
   }
 
   setUnstakeOption(option: 'unstake' | 'swap'): void {
@@ -93,9 +88,7 @@ export class StakeUnstakeModel {
 
     // stub balances/details
     this._tonBalance.set(123.45);
-    this._htonBalance.set(67.89);
-    this.stakingInProgress.set([{ amount: '10', estimated: '2025-08-20' }]);
-    this.unstakingInProgress.set({ amount: '5', estimated: '2025-08-22' });
+    this._shTokenBalance.set(67.89);
   }
 
   async send(): Promise<void> {
@@ -111,6 +104,6 @@ export class StakeUnstakeModel {
   private async refreshBalances(): Promise<void> {
     // TODO: fetch and update balances
     this._tonBalance.set(this._tonBalance());
-    this._htonBalance.set(this._htonBalance());
+    this._shTokenBalance.set(this._shTokenBalance());
   }
 }
