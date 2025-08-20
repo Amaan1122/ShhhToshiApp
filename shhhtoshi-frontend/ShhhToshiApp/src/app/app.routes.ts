@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { WalletGuard } from './guards/wallet.guard';
 
 export const routes: Routes = [
   {
@@ -14,6 +15,7 @@ export const routes: Routes = [
       import('./components/stake-unstake/stake-unstake.component').then(
         (m) => m.StakeUnstakeComponent
       ),
+    canActivate: [WalletGuard],
   },
   {
     path: 'tasks',
@@ -21,6 +23,7 @@ export const routes: Routes = [
       import('../app/components/tasks/tasks.component').then(
         (m) => m.TasksComponent
       ),
+    canActivate: [WalletGuard],
   },
   {
     path: 'referrals',
@@ -28,6 +31,7 @@ export const routes: Routes = [
       import('../app/components/referrals/referrals.component').then(
         (m) => m.ReferralsComponent
       ),
+    canActivate: [WalletGuard],
   },
   {
     path: 'wallet',
@@ -35,6 +39,7 @@ export const routes: Routes = [
       import('../app/components/wallet/wallet.component').then(
         (m) => m.WalletComponent
       ),
+    canActivate: [WalletGuard],
   },
   { path: '**', redirectTo: '' },
 ];

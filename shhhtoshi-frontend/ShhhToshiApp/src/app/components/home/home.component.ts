@@ -7,7 +7,7 @@ import {
   PLATFORM_ID,
 } from '@angular/core';
 import { TonConnectService } from '../../services/ton-connect.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FooterComponent } from '../footer/footer.component';
 
 @Component({
@@ -21,7 +21,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: Object,
     private readonly tonConnectService: TonConnectService,
-    private readonly route: Router
+    private readonly route: Router,
+    private readonly activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -29,9 +30,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   initialize() {
-    this.tonConnectService.walletData$.subscribe((wallet) => {
-      if (wallet?.account?.address) {
-        this.route.navigate(['stake']);
+    this.tonConnectService.walletConnected$.subscribe((connected) => {
+      if (connected) {
+        const returnUrl =
+          this.activatedRoute.snapshot.queryParamMap.get('returnUrl') ||
+          '/stake';
+        this.route.navigateByUrl(returnUrl);
       }
     });
   }
