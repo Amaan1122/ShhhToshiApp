@@ -29,7 +29,7 @@ export class TonConnectService {
 
     const options: TonConnectUiCreateOptions = {
       manifestUrl:
-        'https://shhh-toshi-test-app.vercel.app/assets/tonconnect-manifest.json',
+        'https://shhhtoshiclient.azurewebsites.net/assets/tonconnect-manifest.json',
       buttonRootId: 'ton-connect-button',
     };
 
