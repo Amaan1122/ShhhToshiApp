@@ -7,7 +7,7 @@ export class WalletService {
   baseUrl = 'https://localhost:7069/api/wallet';
   constructor(private readonly http: HttpClient) {}
 
-  setWalletAddress(walletAddress: string): Observable<any> {
+  setWalletUser(walletAddress: string): Observable<any> {
     const headers = new HttpHeaders().set('X-Wallet-Address', walletAddress);
     return this.http.post(`${this.baseUrl}/connect`, {}, { headers });
   }

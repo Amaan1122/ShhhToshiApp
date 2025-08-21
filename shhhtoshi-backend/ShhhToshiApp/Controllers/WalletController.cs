@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Shhhtoshi.Api.DB;
 using ShhhToshiApp.DTOs;
-using ShhhToshiApp.Models;
+using ShhhToshiApp.Models.StakingUnstaking;
 
 namespace ShhhToshiApp.Controllers
 {
@@ -10,11 +10,11 @@ namespace ShhhToshiApp.Controllers
     [Route("api/wallet")]
     public class WalletController : ControllerBase
     {
-        private readonly AppDbContext _db;
+        private readonly AppDbContext _dbContext;
 
-        public WalletController(AppDbContext db)
+        public WalletController(AppDbContext dbContext)
         {
-            _db = db;
+            _dbContext = dbContext;
         }
 
         [HttpPost("connect")]
@@ -23,7 +23,7 @@ namespace ShhhToshiApp.Controllers
             if (string.IsNullOrWhiteSpace(walletAddress))
                 return BadRequest("Wallet address is required");
 
-            var existing = await _db.WalletUsers.FirstOrDefaultAsync(u => u.WalletAddress == walletAddress);
+            var existing = await _dbContext.WalletUsers.FirstOrDefaultAsync(u => u.WalletAddress == walletAddress);
             if (existing != null)
                 return Ok(new { message = "Wallet already connected" });
 
@@ -31,13 +31,15 @@ namespace ShhhToshiApp.Controllers
             {
                 Id = Guid.NewGuid(),
                 WalletAddress = walletAddress,
+                // Seeding initial balance
+                TONBalance = 1000,
                 StakedAmount = 0,
                 LastStakedAt = DateTime.UtcNow,
                 JoinedAt = DateTime.UtcNow
             };
 
-            _db.WalletUsers.Add(newUser);
-            await _db.SaveChangesAsync();
+            _dbContext.WalletUsers.Add(newUser);
+            await _dbContext.SaveChangesAsync();
 
             return Ok(new { message = "Wallet connected", walletAddress });
         }
@@ -45,13 +47,13 @@ namespace ShhhToshiApp.Controllers
         [HttpGet("walletInfo")]
         public async Task<ActionResult<WalletInfoDto>> GetWalletInfo(string walletAddress)
         {
-            var user = await _db.WalletUsers.FirstOrDefaultAsync(u => u.WalletAddress == walletAddress);
+            var user = await _dbContext.WalletUsers.FirstOrDefaultAsync(u => u.WalletAddress == walletAddress);
             if (user == null) return NotFound();
 
             var response = new WalletInfoDto
             {
                 Address = user.WalletAddress,
-                Balance = 1000m, // Replace with actual TON balance fetch
+                TONBalance = user.TONBalance,
                 StakedAmount = user.StakedAmount,
                 LastStakedAt = user.LastStakedAt
             };
@@ -62,38 +64,40 @@ namespace ShhhToshiApp.Controllers
         [HttpPost("stake")]
         public async Task<IActionResult> Stake([FromHeader(Name = "X-Wallet-Address")] string walletAddress, [FromBody] decimal stakeAmount)
         {
-            var user = await _db.WalletUsers.FirstOrDefaultAsync(u => u.WalletAddress == walletAddress);
+            var user = await _dbContext.WalletUsers.FirstOrDefaultAsync(u => u.WalletAddress == walletAddress);
             if (user == null) return NotFound();
 
             user.StakedAmount += stakeAmount;
+            user.TONBalance -= stakeAmount;
             user.LastStakedAt = DateTime.UtcNow;
 
-            await _db.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
             return Ok(new { user.StakedAmount });
         }
 
         [HttpPost("unstake")]
         public async Task<IActionResult> Unstake([FromHeader(Name = "X-Wallet-Address")] string walletAddress, [FromBody] decimal unStakeAmount)
         {
-            var user = await _db.WalletUsers.FirstOrDefaultAsync(u => u.WalletAddress == walletAddress);
+            var user = await _dbContext.WalletUsers.FirstOrDefaultAsync(u => u.WalletAddress == walletAddress);
             if (user == null || user.StakedAmount < unStakeAmount) return BadRequest("Insufficient staking balance");
 
             user.StakedAmount -= unStakeAmount;
-            await _db.SaveChangesAsync();
+            user.TONBalance += unStakeAmount;
+            await _dbContext.SaveChangesAsync();
             return Ok(new { user.StakedAmount });
         }
 
         [HttpPost("claim")]
         public async Task<IActionResult> ClaimRewards([FromHeader(Name = "X-Wallet-Address")] string walletAddress)
         {
-            var user = await _db.WalletUsers.FirstOrDefaultAsync(u => u.WalletAddress == walletAddress);
+            var user = await _dbContext.WalletUsers.FirstOrDefaultAsync(u => u.WalletAddress == walletAddress);
             if (user == null) return NotFound();
 
             var days = (DateTime.UtcNow - user.LastStakedAt).TotalDays;
             var reward = user.StakedAmount * 0.01m * (decimal)days;
 
             user.LastStakedAt = DateTime.UtcNow;
-            await _db.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
 
             return Ok(new { reward });
         }
