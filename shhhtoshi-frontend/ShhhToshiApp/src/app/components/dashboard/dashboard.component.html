@@ -1,0 +1,47 @@
+
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-50 py-8">
+	<!-- Top Icon -->
+	<div class="bg-black rounded-xl p-4 mb-6 flex items-center justify-center">
+		<!-- Placeholder for TON icon -->
+		<span class="text-white text-3xl">🔗</span>
+	</div>
+	<!-- Title & Subtitle -->
+	<h1 class="text-3xl font-bold mb-2">TON Staking</h1>
+	<p class="text-gray-500 mb-8 text-center">Stake your TON tokens and earn rewards</p>
+
+	<!-- Features -->
+	<div class="w-full max-w-xl flex flex-col gap-4 mb-8">
+		<div class="flex items-center gap-4 bg-white rounded-xl shadow border border-gray-200 px-6 py-4">
+			<span class="bg-gray-100 rounded-full p-2 text-xl">🛡️</span>
+			<div>
+				<div class="font-semibold">Secure Staking</div>
+				<div class="text-gray-500 text-sm">Your tokens remain secure in smart contracts</div>
+			</div>
+		</div>
+		<div class="flex items-center gap-4 bg-white rounded-xl shadow border border-gray-200 px-6 py-4">
+			<span class="bg-gray-100 rounded-full p-2 text-xl">⚡</span>
+			<div>
+				<div class="font-semibold">Instant Rewards</div>
+				<div class="text-gray-500 text-sm">Earn up to 12% APY on your staked tokens</div>
+			</div>
+		</div>
+		<div class="flex items-center gap-4 bg-white rounded-xl shadow border border-gray-200 px-6 py-4">
+			<span class="bg-gray-100 rounded-full p-2 text-xl">👥</span>
+			<div>
+				<div class="font-semibold">Referral Rewards</div>
+				<div class="text-gray-500 text-sm">Earn extra points by inviting friends</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Connect Wallet -->
+	<div class="w-full max-w-xl bg-white rounded-xl shadow border border-gray-200 px-6 py-8 flex flex-col items-center">
+		<div class="flex items-center gap-2 mb-2">
+			<span class="text-xl">💳</span>
+			<span class="font-semibold">Connect Your Wallet</span>
+		</div>
+		<div class="text-gray-500 mb-6 text-center">Connect your TON wallet to start staking</div>
+		<button (click)="connectWallet()" class="bg-black text-white font-semibold rounded-lg px-8 py-3 mb-3 hover:bg-gray-900 transition">Connect TON Wallet</button>
+		<div class="text-xs text-gray-400 text-center">Supported wallets: Tonkeeper, TON Wallet, MyTonWallet</div>
+	</div>
+</div>
