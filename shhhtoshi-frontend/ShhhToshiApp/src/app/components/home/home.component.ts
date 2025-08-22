@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         // Navigate to the return URL
         const returnUrl =
           this.activatedRoute.snapshot.queryParamMap.get('returnUrl') ||
-          '/stake';
+          '/dashboard';
         this.route.navigateByUrl(returnUrl);
       }
     });
