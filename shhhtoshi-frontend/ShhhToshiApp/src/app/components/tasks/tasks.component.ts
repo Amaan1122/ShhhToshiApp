@@ -53,7 +53,11 @@ export class TasksComponent implements OnInit {
         this.completedTaskIds = new Set(
           completedTasks.map((task) => task.taskId)
         );
-        this.completedTaskNames = tasks.map((task) => task.title);
+        this.completedTaskNames = tasks
+          .filter((task) => this.completedTaskIds.has(task.id))
+          .map((task) => task.title);
+
+          console.log('Completed Task Names:', this.completedTaskNames);
       })
       .finally(() => {
         this.isLoading = false;
@@ -69,6 +73,4 @@ export class TasksComponent implements OnInit {
       error: () => (this.isClaiming = false),
     });
   }
-
-  // Add more methods for task completion, etc. as needed
 }

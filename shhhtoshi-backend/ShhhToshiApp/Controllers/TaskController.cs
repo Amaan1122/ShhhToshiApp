@@ -102,7 +102,6 @@ namespace ShhhToshiApp.Controllers
         {
             var history = await _dbContext.TaskCompletions
                 .Where(tc => tc.WalletAddress == walletAddress)
-                .OrderByDescending(tc => tc.CompletedAt)
                 .Select(tc => new TaskCompleteHistoryDto
                 {
                     Id = tc.Id,

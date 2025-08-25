@@ -61,4 +61,13 @@ export class TasksService {
       }
     );
   }
+
+  dailyCheckin(walletAddress: string): Observable<any> {
+    const headers = new HttpHeaders().set('X-Wallet-Address', walletAddress);
+    return this.http.post(
+      `${this.baseUrl}/tasks/daily-checkin`,
+      {},
+      { headers }
+    );
+  }
 }
