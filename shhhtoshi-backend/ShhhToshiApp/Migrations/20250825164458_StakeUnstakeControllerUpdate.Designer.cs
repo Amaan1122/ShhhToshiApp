@@ -12,8 +12,8 @@ using Shhhtoshi.Api.DB;
 namespace ShhhToshiApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250820173657_TaskRewardSystem")]
-    partial class TaskRewardSystem
+    [Migration("20250825164458_StakeUnstakeControllerUpdate")]
+    partial class StakeUnstakeControllerUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,6 +35,9 @@ namespace ShhhToshiApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LastStakedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastUnstakedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Points")

@@ -34,6 +34,9 @@ namespace ShhhToshiApp.Migrations
                     b.Property<DateTime>("LastStakedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("LastUnstakedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Points")
                         .HasColumnType("int");
 
