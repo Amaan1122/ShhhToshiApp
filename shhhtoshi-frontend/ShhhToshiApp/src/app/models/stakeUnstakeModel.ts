@@ -73,11 +73,7 @@ export class StakeUnstakeModel {
   setAmount(value: number): void {
     this.amount.set(value);
   }
-
-  setAmountToMax(): void {
-    this.amount.set(this._tonBalance());
-  }
-
+  
   setUnstakeOption(option: 'unstake' | 'swap'): void {
     this.unstakeOption.set(option);
   }
@@ -85,25 +81,5 @@ export class StakeUnstakeModel {
   async connect(): Promise<void> {
     // TODO: call your TON wallet SDK
     this.isWalletConnected.set(true);
-
-    // stub balances/details
-    this._tonBalance.set(123.45);
-    this._shTokenBalance.set(67.89);
-  }
-
-  async send(): Promise<void> {
-    // TODO: stake or unstake on chain
-    if (this.isStakeTabActive()) {
-      // await contract.stake(this.amount())
-    } else if (this.unstakeOption() === 'unstake') {
-      // await contract.unstake(this.amount())
-    }
-    await this.refreshBalances();
-  }
-
-  private async refreshBalances(): Promise<void> {
-    // TODO: fetch and update balances
-    this._tonBalance.set(this._tonBalance());
-    this._shTokenBalance.set(this._shTokenBalance());
   }
 }
