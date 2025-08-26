@@ -41,5 +41,13 @@ export const routes: Routes = [
       ),
     canActivate: [WalletGuard],
   },
+  {
+    path: 'dashboard',
+    loadComponent: () =>
+      import('../app/components/dashboard/dashboard.component').then(
+        (m) => m.DashboardComponent
+      ),
+    canActivate: [WalletGuard],
+  },
   { path: '**', redirectTo: '' },
 ];

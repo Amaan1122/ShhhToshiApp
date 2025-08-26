@@ -98,12 +98,6 @@ export class StakeUnstakeComponent {
       .subscribe(() => this.ngOnInit());
   }
 
-  claimRewards() {
-    this.stakeUnstakeService
-      .claimRewards(this.walletAddress)
-      .subscribe(() => this.ngOnInit());
-  }
-
   disconnectWallet() {
     this.tonConnectService.disconnect();
     this.route.navigate(['home']);

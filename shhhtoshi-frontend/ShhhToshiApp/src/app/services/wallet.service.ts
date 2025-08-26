@@ -4,6 +4,10 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class WalletService {
+  // For Production
+  // baseUrl = 'https://shhhtoshiapi.azurewebsites.net/api/wallet';
+  
+  // For Local Development
   baseUrl = 'https://localhost:7069/api/wallet';
   constructor(private readonly http: HttpClient) {}
 

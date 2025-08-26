@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShhhToshiApp.Migrations
 {
     /// <inheritdoc />
-    public partial class TaskRewardSystem : Migration
+    public partial class StakeUnstakeControllerUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,6 +35,7 @@ namespace ShhhToshiApp.Migrations
                     StakedAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TONBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     LastStakedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUnstakedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     JoinedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Points = table.Column<int>(type: "int", nullable: false)
                 },

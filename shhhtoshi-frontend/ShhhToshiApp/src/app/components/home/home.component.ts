@@ -10,6 +10,7 @@ import { TonConnectService } from '../../services/ton-connect.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FooterComponent } from '../footer/footer.component';
 import { WalletService } from '../../services/wallet.service';
+import { TasksService } from '../../services/tasks.service';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     @Inject(PLATFORM_ID) private readonly platformId: Object,
     private readonly tonConnectService: TonConnectService,
     private readonly walletService: WalletService,
+    private readonly tasksService: TasksService,
     private readonly route: Router,
     private readonly activatedRoute: ActivatedRoute
   ) {}
@@ -37,10 +39,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
         // Set the wallet user in database
         const walletAddress = this.tonConnectService.getCurrentWalletAddress();
         this.setWalletUser(walletAddress);
+        // Trigger Daily check-in
+        // this.tasksService.dailyCheckin(walletAddress).subscribe({
+        //   next: (res) => {
+        //     console.log('Daily check-in result:', res);
+        //   },
+        //   error: (err) => {
+        //     console.log('Daily check-in error:', err);
+        //   }
+        // });
         // Navigate to the return URL
         const returnUrl =
           this.activatedRoute.snapshot.queryParamMap.get('returnUrl') ||
-          '/stake';
+          '/dashboard';
         this.route.navigateByUrl(returnUrl);
       }
     });

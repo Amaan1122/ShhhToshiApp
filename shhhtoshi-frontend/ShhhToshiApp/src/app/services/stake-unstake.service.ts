@@ -4,7 +4,11 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class StakeUnstakeService {
-  baseUrl = 'https://localhost:7069/api/wallet';
+  // For Production
+  // baseUrl = 'https://shhhtoshiapi.azurewebsites.net/api/wallet';
+  
+  // For Local Development
+  baseUrl = 'https://localhost:7069/api';
   constructor(private readonly http: HttpClient) {}
 
   stake(walletAddress: string, stakeAmount: number): Observable<any> {
@@ -17,10 +21,5 @@ export class StakeUnstakeService {
     return this.http.post(`${this.baseUrl}/unstake`, unStakeAmount, {
       headers,
     });
-  }
-
-  claimRewards(walletAddress: string): Observable<any> {
-    const headers = new HttpHeaders().set('X-Wallet-Address', walletAddress);
-    return this.http.post(`${this.baseUrl}/claim`, {}, { headers });
   }
 }

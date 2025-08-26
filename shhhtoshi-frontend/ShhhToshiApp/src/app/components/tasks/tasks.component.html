@@ -1,2 +1,134 @@
-<!-- Footer -->
+<app-header></app-header>
+<div class="max-w-2xl mx-auto py-10 px-4 pt-20">
+  <!-- Points Balance Card -->
+  <div class="bg-white rounded-2xl shadow border border-gray-200 p-8 mb-8">
+    <div class="flex items-center gap-2 mb-4">
+      <span class="text-yellow-400 text-xl">★</span>
+      <span class="font-semibold text-lg">Points Balance</span>
+    </div>
+    <div class="text-4xl font-bold text-center mb-1">
+      {{ pointsInfo?.points ?? 0 | number }}
+    </div>
+    <div class="text-gray-500 text-center mb-6">Total Points Earned</div>
+    <div class="flex justify-between mb-2">
+      <div class="text-center">
+        <div class="text-lg font-semibold">{{ pointsInfo?.points ?? 0 }}</div>
+        <div class="text-xs text-gray-500">Available to Claim</div>
+      </div>
+      <div class="text-center">
+        <div class="text-lg font-semibold">Level 1</div>
+        <div class="text-xs text-gray-500">Current Level</div>
+      </div>
+    </div>
+    <div class="mb-1 mt-4">
+      <div class="text-xs font-medium mb-1">Level Progress</div>
+      <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div
+          class="h-2 bg-black rounded-full"
+          [style.width]="(pointsInfo?.points ?? 0) / 10 + '%'"
+        ></div>
+      </div>
+      <div class="flex justify-between text-xs text-gray-500 mt-1">
+        <span></span>
+        <span>{{ pointsInfo?.points ?? 0 }}/1000 XP</span>
+      </div>
+      <div class="text-center text-xs text-gray-400 mt-1">
+        {{ 1000 - (pointsInfo?.points ?? 0) }} points to Level 2
+      </div>
+    </div>
+  </div>
+
+  <!-- Claiming Points Card -->
+  <div class="bg-white rounded-2xl shadow border border-gray-200 p-8 mb-8">
+    <div class="font-semibold text-lg mb-1">Claim Points</div>
+    <div class="text-gray-500 mb-4">Exchange your points for TON tokens</div>
+    <div
+      class="bg-gray-100 rounded-lg px-4 py-3 mb-4 flex flex-col md:flex-row md:items-center md:justify-between"
+    >
+      <div class="font-semibold text-sm mb-1 md:mb-0">Conversion Rate</div>
+      <div class="text-sm font-mono">
+        {{ pointsInfo?.conversionRate ?? 1000 }} Points = 1 TON
+      </div>
+      <div class="text-xs text-gray-500 md:ml-4">
+        You can convert {{ pointsInfo?.points ?? 0 }} points to
+        {{
+          (pointsInfo?.points ?? 0) / (pointsInfo?.conversionRate ?? 1000)
+            | number : "1.3-3"
+        }}
+        TON
+      </div>
+    </div>
+    <button
+      (click)="onClaimPoints()"
+      [disabled]="
+        isClaiming ||
+        (pointsInfo?.points ?? 0) < (pointsInfo?.conversionRate ?? 1000)
+      "
+      class="w-full bg-black text-white font-semibold rounded-lg px-8 py-3 hover:bg-gray-900 transition disabled:opacity-50"
+    >
+      <span *ngIf="!isClaiming">Claim All Points</span>
+      <span *ngIf="isClaiming">Converting...</span>
+    </button>
+  </div>
+
+  <!-- Available Tasks Section -->
+  <div class="bg-white rounded-2xl shadow border border-gray-200 p-8 mb-8">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="text-2xl">🎯</span>
+      <span class="font-semibold text-lg">Available Tasks</span>
+    </div>
+    <div class="text-gray-500 mb-6">Complete tasks to earn points</div>
+    <div class="flex flex-col gap-4">
+      <ng-container *ngFor="let task of tasks">
+        <div
+          *ngIf="!completedTaskIds.has(task.id)"
+          class="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3"
+        >
+          <div class="flex items-center gap-3">
+            <span class="text-xl">🏆</span>
+            <div>
+              <div class="font-semibold">{{ task.title }}</div>
+              <div class="text-xs text-gray-500">{{ task.description }}</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="font-semibold text-lg">+{{ task.points }}</span>
+            <span
+              class="bg-gray-200 text-black text-xs font-semibold rounded-lg px-3 py-1"
+              >Pending</span
+            >
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Claim History Section -->
+  <div class="bg-white rounded-2xl shadow border border-gray-200 p-8 mb-8">
+    <div class="flex items-center gap-2 mb-4">
+      <span class="text-2xl">🎁</span>
+      <span class="font-semibold text-lg">Claim History</span>
+    </div>
+    <div class="flex flex-col gap-3">
+      <ng-container *ngFor="let claim of claimHistory; index as i">
+        <div
+          class="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3"
+        >
+          <div class="">
+            <div class="font-semibold">Claimed</div>
+            <div class="text-xs text-gray-500">
+              {{ claim.claimedAt | date : "shortDate" }}
+            </div>
+          </div>
+          <div class="text-end">
+            <div class="font-semibold">{{ completedTaskNames[i] }}</div>
+            <div class="text-xs text-green-600">
+              +{{ claim.pointsClaimed }} Points
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
 <app-footer></app-footer>
