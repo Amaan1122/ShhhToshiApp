@@ -70,4 +70,11 @@ export class TasksService {
       { headers }
     );
   }
+
+  getTotalRewardEarned(walletAddress: string): Observable<number> {
+    const headers = new HttpHeaders().set('X-Wallet-Address', walletAddress);
+    return this.http.get<number>(`${this.baseUrl}/points/total-earned`, {
+      headers,
+    });
+  }
 }
