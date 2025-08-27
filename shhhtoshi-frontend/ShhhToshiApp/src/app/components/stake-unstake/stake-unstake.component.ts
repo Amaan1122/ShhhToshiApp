@@ -1,5 +1,11 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Input,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { StakeUnstakeModel } from '../../models/stakeUnstakeModel';
 import { FooterComponent } from '../footer/footer.component';
 import { StakeUnstakeService } from '../../services/stake-unstake.service';
@@ -7,11 +13,12 @@ import { TonConnectService } from '../../services/ton-connect.service';
 import { Router } from '@angular/router';
 import { WalletService } from '../../services/wallet.service';
 import { HeaderComponent } from '../header/header.component';
+import { TasksService } from '../../services/tasks.service';
 
 @Component({
   selector: 'app-stake-unstake',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, FooterComponent],
+  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './stake-unstake.component.html',
   styleUrl: './stake-unstake.component.css',
@@ -19,18 +26,20 @@ import { HeaderComponent } from '../header/header.component';
 export class StakeUnstakeComponent {
   walletAddress = '';
   walletBalance = 0;
+  walletPoints = 0;
   stakedAmount = 0;
   stakeAmount = 0;
   unstakeAmount = 0;
-  estimatedReward = 0;
 
   @Input({ required: true }) model!: StakeUnstakeModel;
 
   constructor(
     private readonly walletService: WalletService,
     private readonly stakeUnstakeService: StakeUnstakeService,
+    private readonly tasksService: TasksService,
     private readonly tonConnectService: TonConnectService,
-    private readonly route: Router
+    private readonly route: Router,
+    private readonly cdr: ChangeDetectorRef
   ) {
     this.model = new StakeUnstakeModel();
   }
@@ -73,29 +82,37 @@ export class StakeUnstakeComponent {
     this.walletService
       .getWalletInfo(connectedWalletAddress)
       .subscribe((info) => {
-        this.walletAddress = info.address;
-        this.walletBalance = info.balance;
+        this.walletAddress = info.walletAddress;
+        this.walletBalance = info.tonBalance;
         this.stakedAmount = info.stakedAmount;
-        this.calculateReward(info.lastStakedAt);
+        this.walletPoints = info.points;
+        this.cdr.markForCheck();
       });
-  }
-
-  calculateReward(lastStakedAt: string) {
-    const days =
-      (Date.now() - new Date(lastStakedAt).getTime()) / (1000 * 60 * 60 * 24);
-    this.estimatedReward = this.stakedAmount * 0.01 * days;
   }
 
   stakeNow() {
     this.stakeUnstakeService
       .stake(this.walletAddress, this.model.amount())
-      .subscribe(() => this.ngOnInit());
+      .subscribe({
+        next: () => this.ngOnInit(),
+        error: (err) => console.error('Error staking:', err),
+      });
   }
 
   unstakeNow() {
     this.stakeUnstakeService
       .unstake(this.walletAddress, this.model.amount())
-      .subscribe(() => this.ngOnInit());
+      .subscribe({
+        next: () => this.ngOnInit(),
+        error: (err) => console.error('Error unstaking:', err),
+      });
+  }
+
+  claimRewards() {
+    this.tasksService.claimPoints(this.walletAddress).subscribe({
+      next: () => this.ngOnInit(),
+      error: (err) => console.error('Error claiming rewards:', err),
+    });
   }
 
   disconnectWallet() {

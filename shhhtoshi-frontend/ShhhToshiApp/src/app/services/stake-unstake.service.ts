@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class StakeUnstakeService {
   // For Production
-  // baseUrl = 'https://shhhtoshiapi.azurewebsites.net/api/wallet';
+  // baseUrl = 'https://shhhtoshiapi.azurewebsites.net/api';
   
   // For Local Development
   baseUrl = 'https://localhost:7069/api';
