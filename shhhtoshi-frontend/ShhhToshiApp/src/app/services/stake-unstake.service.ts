@@ -1,3 +1,4 @@
+import { StakeUnstakeEventModel } from '../models/StakeUnstakeEventModel';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -6,7 +7,7 @@ import { Observable } from 'rxjs';
 export class StakeUnstakeService {
   // For Production
   // baseUrl = 'https://shhhtoshiapi.azurewebsites.net/api';
-  
+
   // For Local Development
   baseUrl = 'https://localhost:7069/api';
   constructor(private readonly http: HttpClient) {}
@@ -21,5 +22,15 @@ export class StakeUnstakeService {
     return this.http.post(`${this.baseUrl}/unstake`, unStakeAmount, {
       headers,
     });
+  }
+
+  getStakeUnstakeHistory(
+    walletAddress: string
+  ): Observable<StakeUnstakeEventModel[]> {
+    const headers = new HttpHeaders().set('X-Wallet-Address', walletAddress);
+    return this.http.get<StakeUnstakeEventModel[]>(
+      `${this.baseUrl}/stakeUnstake/history`,
+      { headers }
+    );
   }
 }

@@ -21,7 +21,7 @@
         <span class="text-gray-500 text-sm">Total Rewards</span>
       </div>
       <div class="text-2xl font-bold text-green-600">
-        {{ totalRewardEarned }}
+        {{ totalRewardEarned / 100 }} TON
       </div>
     </div>
   </div>
@@ -53,6 +53,41 @@
         <div class="text-xs text-gray-500">Last Claimed</div>
         <div class="text-lg font-bold">
           {{ lastClaimedAt ? (lastClaimedAt | date:'mediumDate') : 'Never' }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transaction History Section -->
+  <div class="bg-white rounded-2xl shadow border border-gray-200 p-8 w-full max-w-md mt-8">
+    <div class="mb-2">
+      <div class="font-semibold text-lg">Transaction History</div>
+      <div class="text-gray-500 text-sm">Your recent staking activities</div>
+    </div>
+    <div *ngFor="let tx of transactionHistory" class="flex items-center gap-3 border-b last:border-b-0 border-gray-100 py-4">
+      <div class="flex-shrink-0">
+        <span *ngIf="tx.type === 'Reward'" class="text-2xl">🎁</span>
+        <span *ngIf="tx.type === 'Stake'" class="text-2xl">↗️</span>
+        <span *ngIf="tx.type === 'Unstake'" class="text-2xl">↘️</span>
+      </div>
+      <div class="flex-1">
+        <div class="font-medium">{{ tx.type }}</div>
+        <div class="text-xs text-gray-400">{{ tx.date | date:'M/d/yyyy' }}</div>
+      </div>
+      <div class="flex flex-col items-end">
+        <div [ngClass]="{
+          'text-green-600': tx.amount > 0,
+          'text-red-500': tx.amount < 0
+        }" class="font-bold text-base">
+          {{ tx.amount > 0 ? '+' : '' }}{{ tx.amount | number:'1.2-2' }} TON
+        </div>
+        <div class="mt-1">
+          <span [ngClass]="{
+            'bg-black text-white': tx.status === 'completed',
+            'bg-orange-100 text-orange-600': tx.status === 'pending'
+          }" class="text-xs font-semibold rounded px-2 py-0.5">
+            {{ tx.status }}
+          </span>
         </div>
       </div>
     </div>

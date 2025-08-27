@@ -1,4 +1,12 @@
 import { Component } from '@angular/core';
+
+interface TransactionHistoryItem {
+  type: 'Reward' | 'Stake' | 'Unstake';
+  amount: number;
+  date: string; // ISO string
+  status: 'completed' | 'pending';
+}
+
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../footer/footer.component';
 import { HeaderComponent } from '../header/header.component';
@@ -6,6 +14,8 @@ import { TonConnectService } from '../../services/ton-connect.service';
 import { WalletInfoModel } from '../../models/WalletInfoModel';
 import { WalletService } from '../../services/wallet.service';
 import { TasksService } from '../../services/tasks.service';
+import { StakeUnstakeService } from '../../services/stake-unstake.service';
+import { StakeUnstakeEventModel } from '../../models/StakeUnstakeEventModel';
 import { ClaimHistoryItem } from '../../models/TasksModel';
 
 @Component({
@@ -16,6 +26,7 @@ import { ClaimHistoryItem } from '../../models/TasksModel';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent {
+  public transactionHistory: TransactionHistoryItem[] = [];
   walletInfo?: WalletInfoModel;
   totalRewardEarned: number = 0;
   daysStaked: number = 0;
@@ -27,7 +38,8 @@ export class DashboardComponent {
   constructor(
     private readonly tonConnectService: TonConnectService,
     private readonly walletService: WalletService,
-    private readonly tasksService: TasksService
+    private readonly tasksService: TasksService,
+    private readonly stakeUnstakeService: StakeUnstakeService
   ) {}
 
   ngOnInit() {
@@ -35,6 +47,31 @@ export class DashboardComponent {
       this.calculateDaysStaked();
       this.getTotalRewardEarned();
       this.getClaimHistory();
+      this.loadTransactionHistory();
+    });
+  }
+  loadTransactionHistory() {
+    if (!this.walletInfo?.walletAddress) return;
+    // Fetch both histories in parallel
+    this.stakeUnstakeService.getStakeUnstakeHistory(this.walletInfo.walletAddress).subscribe((stakeEvents: StakeUnstakeEventModel[]) => {
+      this.tasksService.getClaimHistory(this.walletInfo!.walletAddress).subscribe((claimHistory: ClaimHistoryItem[]) => {
+        // Map stake/unstake events
+        const stakeTxs: TransactionHistoryItem[] = stakeEvents.map(e => ({
+          type: e.type,
+          amount: e.type === 'Stake' ? e.amount : -Math.abs(e.amount),
+          date: e.eventDate,
+          status: e.status
+        }));
+        // Map reward claims
+        const rewardTxs: TransactionHistoryItem[] = claimHistory.map(c => ({
+          type: 'Reward',
+          amount: c.convertedAmount,
+          date: c.claimedAt,
+          status: 'completed'
+        }));
+        // Merge and sort by date desc
+        this.transactionHistory = [...stakeTxs, ...rewardTxs].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      });
     });
   }
 
